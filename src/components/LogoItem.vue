@@ -50,6 +50,7 @@
 
 <style lang="css" scoped>
 * {
+	/* Colors */
 	--main-bg: #c2c2c2;
 	--trunk-bg-1: #5e2100;
 	--trunk-bg-2: #783e00;
@@ -62,23 +63,27 @@
 	--star-bg: #ffdd00;
 	--shine-bg: #ffeb69;
 	--snow-bg: #f2f2f2;
-	--tree-width: 200px;
-	--tree-height: 400px;
-	--tree-rotate: -15deg;
-	--trunk-width: 30px;
-	--trunk-height: 400px;
-	--trunk-angle: 4.3deg;
-	--leaves-translate: 15px;
-	--leaves-bottom-width: 100px;
-	--leaves-bottom-height: 320px;
+
+	/* Dimentions */
+	--tree-width: calc(200px / 2);
+	--tree-height: calc(400px / 2);
+	--trunk-width: calc(30px / 2);
+	--trunk-height: calc(400px / 2);
+	--leaves-translate: calc(15px / 2);
+	--leaves-bottom-width: calc(100px / 2);
+	--leaves-bottom-height: calc(320px / 2);
+	--leaves-middle-width: calc(80px / 2);
+	--leaves-middle-height: calc(220px / 2);
+	--leaves-top-width: calc(60px / 2);
+	--leaves-top-height: calc(140px / 2);
+	--star-size: calc(20px / 2);
+
+	/* Rotations */
 	--leaves-bottom-angle: 18.2deg;
-	--leaves-middle-width: 80px;
-	--leaves-middle-height: 220px;
 	--leaves-middle-angle: 21.4deg;
-	--leaves-top-width: 60px;
-	--leaves-top-height: 140px;
 	--leaves-top-angle: 25.5deg;
-	--star-size: 20px;
+	--tree-rotate: -15deg;
+	--trunk-angle: 4.3deg;
 }
 
 .ts-3d {
@@ -88,7 +93,6 @@
 .container {
 	width: 100%;
 	min-height: 100%;
-	overflow: hidden;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -384,80 +388,80 @@
 }
 
 .snow-1 {
-	width: 20px;
-	height: 20px;
+	width: 15px;
+	height: 15px;
 	top: calc(50% - 250px);
 	left: calc(50% - 10px);
 	animation: 1s snow-x linear infinite;
 }
 
 .snow-2 {
-	width: 15px;
-	height: 15px;
+	width: 10px;
+	height: 10px;
 	top: calc(50% - 300px);
 	left: calc(50% - 30px);
 	animation: 0.8s snow-x linear infinite 0.1s;
 }
 
 .snow-3 {
-	width: 10px;
-	height: 10px;
+	width: 5px;
+	height: 5px;
 	top: calc(50% - 400px);
 	left: calc(50% + 60px);
 	animation: 0.6s snow-x linear infinite 0.8s;
 }
 
 .snow-4 {
-	width: 25px;
-	height: 25px;
+	width: 20px;
+	height: 20px;
 	top: calc(50% - 200px);
 	left: calc(50% + 50px);
 	animation: 0.5s snow-x linear infinite 0.5s;
 }
 
 .snow-5 {
-	width: 18px;
-	height: 18px;
+	width: 13px;
+	height: 13px;
 	top: calc(50% - 200px);
 	left: calc(50% - 50px);
 	animation: 0.5s snow-x linear infinite 0.5s;
 }
 
 .snow-6 {
-	width: 12px;
-	height: 12px;
+	width: 7px;
+	height: 7px;
 	top: calc(50% - 150px);
 	left: calc(50% - 120px);
 	animation: 0.8s snow-x linear infinite 0.5s;
 }
 
 .snow-7 {
-	width: 20px;
-	height: 20px;
+	width: 15px;
+	height: 15px;
 	top: calc(50% - 150px);
 	left: calc(50% + 75px);
 	animation: 1s snow-x linear infinite 0.6s;
 }
 
 .snow-8 {
-	width: 22px;
-	height: 22px;
+	width: 17px;
+	height: 17px;
 	top: calc(50% - 10px);
 	left: calc(50% - 30px);
 	animation: 1s snow-x linear infinite 0.8s;
 }
 
 .snow-9 {
-	width: 8px;
-	height: 8px;
+	width: 3px;
+	height: 3px;
 	top: calc(50% - 250px);
 	left: calc(50% - 30px);
 	animation: 1s snow-x linear infinite 0.8s;
 }
 
 .snow-10 {
-	width: 13px;
-	height: 13px;
+	width: 8px;
+	height: 8px;
 	top: calc(50% - 250px);
 	left: calc(50% - 100px);
 	animation: 1s snow-x linear infinite 0.8s;

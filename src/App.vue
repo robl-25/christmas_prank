@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import LogoItem from './components/LogoItem.vue'
+import { RouterView } from 'vue-router'
+import ChristmasLights from './components/ChristmasLights.vue'
 </script>
 
 <template>
   <header>
      <div class="logo">
-      <LogoItem />
+      <ChristmasLights />
      </div>
   </header>
 
@@ -21,9 +21,9 @@ header {
 
 .logo {
   display: block;
-  margin: 0 auto 2rem;
-  width: 590px;
-  height: 700px;
+  margin: 0;
+  width: 100%;
+  height: 80px;
 }
 
 nav {
