@@ -1,20 +1,26 @@
 <script setup lang="ts">
-const props = defineProps<{ text: string }>()
+const props = withDefaults(defineProps<{ 
+  text: string, 
+  center?: boolean,
+}>(), { center: true })
 </script>
 
 <template>
-    <p class=text>
-        <span v-for="word in props.text.split(' ')" :key="word">{{ word }}</span>
-    </p>
+  <p class=text :class="{ 'centralize': props.center }">
+    <span v-for="word in props.text.split(' ')" :key="word">{{ word }}</span>
+  </p>
 </template>
 
 <style lang="css" scoped>
+.centralize {
+  text-align: center;
+}
+
 .text {
   font-size: xx-large;
   color: burlywood;
   font-family: Apple Chancery, cursive;
   font-variant: small-caps;
-  text-align: center;
   height: 100%;
   line-height: normal;
   transform: scale(0.94);

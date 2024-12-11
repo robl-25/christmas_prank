@@ -33,7 +33,7 @@ async function showText() {
     <div class="text">
       <TextAnimated :text="'Bem-vindas ao jogo de perguntas e respostas que te dá um presente de natal'" v-if="showFirst" />
       <TextAnimated :text="'Caso vocês vençam! &#128527;'" v-if="showSecond"/>
-      <NextButton url="/start_game" text="Começar o jogo" v-if="showButton"/>
+      <NextButton url="/rules" text="Começar o jogo" v-if="showButton"/>
     </div>
   </div>
 </template>
