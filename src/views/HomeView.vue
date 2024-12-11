@@ -4,12 +4,12 @@ import { ref } from 'vue'
 import LogoItem from '../components/LogoItem.vue'
 import TextAnimated from '../components/TextAnimated.vue'
 import NextButton from '../components/NextButton.vue'
+import { delay } from '../composables/time.ts'
+import { setCookie } from '../composables/cookies.ts'
 
 const showFirst = ref(true)
 const showSecond = ref(false)
 const showButton = ref(false)
-
-const delay = ms => new Promise(res => setTimeout(res, ms));
 
 showText()
 
@@ -21,6 +21,9 @@ async function showText() {
   await delay(5000)
   showSecond.value = false
   showButton.value = true
+
+  setCookie('players', 'Viviane,Carol,Sandra')
+  setCookie('playersToGo', 'Viviane,Carol,Sandra')
 }
 </script>
 
