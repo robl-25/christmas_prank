@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { RouterLink, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import TextAnimated from '../components/TextAnimated.vue'
 import NextButton from '../components/NextButton.vue'
 import { delay } from '../composables/time.ts'
 import { setCookie, getCookie } from '../composables/cookies.ts'
 import { getRandomInt } from '../composables/random.ts'
+import { removeItemOnce } from '../composables/array.ts'
 
 const router = useRouter()
 const cookiePlayers = getCookie('players')
+const cookiePlayersToGo = getCookie('playersToGo')
 
 if (!cookiePlayers) {
   router.push({ name: 'home' })
@@ -19,19 +21,12 @@ const showButton = ref(false)
 const player = ref('')
 
 if (cookiePlayers) {
-  let playersToGo = getCookie('playersToGo')
-  let players = cookiePlayers.split(',')
-
-  if (playersToGo) {
-    playersToGo = playersToGo.split(',')
-  } else {
-    playersToGo = players
-  }
+  const players = cookiePlayers.split(',')
+  const playersToGo = cookiePlayersToGo ? cookiePlayersToGo.split(',') : players
 
   player.value = playersToGo[getRandomInt(0, playersToGo.length - 1)]
-  playersToGo.pop(player.value)
 
-  setCookie('playersToGo', playersToGo.join(','))
+  setCookie('playersToGo', removeItemOnce(playersToGo, player.value).join(','))
   setCookie('currentPlayer', player.value)
 }
 

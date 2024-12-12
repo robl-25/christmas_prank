@@ -3,13 +3,13 @@ const props = defineProps<{ url: string, text: string }>()
 </script>
 
 <template>
-  <div class="container">
+  <div class="button-container">
     <RouterLink :to="props.url" class="button-85">{{ props.text }}</RouterLink>
   </div>
 </template>
 
 <style lang="css" scoped>
-.container {
+.button-container {
     text-align: center;
     margin-top: 2rem;
 }

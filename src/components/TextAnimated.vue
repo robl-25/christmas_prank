@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const props = withDefaults(defineProps<{ 
-  text: string, 
+const props = withDefaults(defineProps<{
+  text: string,
   center?: boolean,
 }>(), { center: true })
 </script>
@@ -21,7 +21,6 @@ const props = withDefaults(defineProps<{
   color: burlywood;
   font-family: Apple Chancery, cursive;
   font-variant: small-caps;
-  height: 100%;
   line-height: normal;
   transform: scale(0.94);
   animation: scale 3s forwards cubic-bezier(0.5, 1, 0.89, 1);
