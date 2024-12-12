@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
 import LogoItem from '../components/LogoItem.vue'
 import TextAnimated from '../components/TextAnimated.vue'
