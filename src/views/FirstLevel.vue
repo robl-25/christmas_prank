@@ -60,6 +60,7 @@ function hapinessSelection(scale: number) {
   <div class="result" v-if="showSadness">
     <img src="/office_sad.gif" alt="Office Sad" />
     <TextAnimated text="Hmm, você não parece animada o suficiente" />
+    <TextAnimated text="Perdeu a vez" />
     <NextButton url="/rules" text="Próxima jogadora" />
   </div>
 
