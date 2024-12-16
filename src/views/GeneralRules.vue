@@ -11,6 +11,8 @@ import { removeItemOnce } from '../composables/array.ts'
 const router = useRouter()
 const cookiePlayers = getCookie('players')
 const cookiePlayersToGo = getCookie('playersToGo')
+const showRulesCookie = getCookie('generalRules')
+const showRules = ref(true)
 
 if (!cookiePlayers) {
   router.push({ name: 'home' })
@@ -28,37 +30,48 @@ if (cookiePlayers) {
 
   setCookie('playersToGo', removeItemOnce(playersToGo, player.value).join(','))
   setCookie('currentPlayer', player.value)
-  setCookie('level2Tipes', 'true')
 }
 
 showText()
 
 async function showText() {
-  showElements.value[0] = true
+  if ([null, undefined, 'true'].includes(showRulesCookie)) {
+    showElements.value[0] = true
 
-  for (let index = 1; index < showElements.value.length; index++) {
-    await delay(5000)
-    showElements.value[index - 1] = false
-    showElements.value[index] = true
+    for (let index = 1; index < showElements.value.length; index++) {
+      await delay(5000)
+      showElements.value[index - 1] = false
+      showElements.value[index] = true
+    }
+
+    setCookie('generalRules', 'false')
+  } else {
+    showRules.value = false
+    showElements.value[5] = true
+
+    for (let index = 6; index < showElements.value.length; index++) {
+      await delay(5000)
+      showElements.value[index - 1] = false
+      showElements.value[index] = true
+    }
   }
 
-  await delay(5000)
   showButton.value = true
 }
 </script>
 
 <template>
-  <TextAnimated text='Regras' />
+  <TextAnimated text="Regras" v-if="showRules" />
 
   <div class="text">
-    <TextAnimated text='Vocês precisam passar por 3 níveis para vencer' v-if="showElements[0]" />
-    <TextAnimated text='Caso vocês percam, ficam sem presente &#128520;' v-if="showElements[1]" />
-    <TextAnimated text='Cada uma terá a sua vez de jogar' v-if="showElements[2]" />
-    <TextAnimated text='Quando seu nome aparecer na tela é a sua vez' v-if="showElements[3]" />
-    <TextAnimated text='Preparadas?' v-if="showElements[4]" />
-    <TextAnimated text='A próxima a jogar é...' v-if="showElements[5]" />
-    <TextAnimated :text=player v-if="showElements[6]" />
-    <NextButton url="/first-level" text="Começar o jogo" v-if="showButton"/>
+    <TextAnimated text="Vocês precisam passar por 3 níveis para vencer" v-if="showElements[0]" />
+    <TextAnimated text="Caso vocês percam, ficam sem presente &#128520;" v-if="showElements[1]" />
+    <TextAnimated text="Cada uma terá a sua vez de jogar" v-if="showElements[2]" />
+    <TextAnimated text="Quando seu nome aparecer na tela é a sua vez" v-if="showElements[3]" />
+    <TextAnimated text="Preparadas?" v-if="showElements[4]" />
+    <TextAnimated text="A próxima a jogar é..." v-if="showElements[5]" />
+    <TextAnimated :text="player" v-if="showElements[6]" />
+    <NextButton url="/first-level" text="Começar o jogo" v-if="showButton" />
   </div>
 </template>
 

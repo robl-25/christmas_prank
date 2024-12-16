@@ -1,13 +1,16 @@
 <script setup lang="ts">
-const props = withDefaults(defineProps<{
-  text: string,
-  center?: boolean,
-}>(), { center: true })
+const props = withDefaults(
+  defineProps<{
+    text: string
+    center?: boolean
+  }>(),
+  { center: true },
+)
 </script>
 
 <template>
-  <p class=text :class="{ 'centralize': props.center }">
-    <span v-for="word in props.text.split(' ')" :key="word">{{ word }}</span>
+  <p class="text" :class="{ centralize: props.center }">
+    <span v-for="word in props.text.split(' ')" :key="word" v-html="word"></span>
   </p>
 </template>
 
@@ -19,7 +22,9 @@ const props = withDefaults(defineProps<{
 .text {
   font-size: xx-large;
   color: burlywood;
-  font-family: Apple Chancery, cursive;
+  font-family:
+    Apple Chancery,
+    cursive;
   font-variant: small-caps;
   line-height: normal;
   transform: scale(0.94);

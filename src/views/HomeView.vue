@@ -16,13 +16,15 @@ async function showText() {
   await delay(5000)
   showFirst.value = false
   showSecond.value = true
-  
+
   await delay(5000)
   showSecond.value = false
   showButton.value = true
 
   setCookie('players', 'Viviane,Carol,Sandra')
   setCookie('playersToGo', 'Viviane,Carol,Sandra')
+  setCookie('level2Tipes', 'true')
+  setCookie('generalRules', 'true')
 }
 </script>
 
@@ -31,11 +33,14 @@ async function showText() {
     <div class="logo">
       <LogoItem />
     </div>
-    
+
     <div class="text">
-      <TextAnimated :text="'Bem-vindas ao jogo de perguntas e respostas que te dá um presente de natal'" v-if="showFirst" />
-      <TextAnimated :text="'Caso vocês vençam! &#128527;'" v-if="showSecond"/>
-      <NextButton url="/rules" text="Começar o jogo" v-if="showButton"/>
+      <TextAnimated
+        :text="'Bem-vindas ao jogo de perguntas e respostas que te dá um presente de natal'"
+        v-if="showFirst"
+      />
+      <TextAnimated :text="'Caso vocês vençam! &#128527;'" v-if="showSecond" />
+      <NextButton url="/rules" text="Começar o jogo" v-if="showButton" />
     </div>
   </div>
 </template>

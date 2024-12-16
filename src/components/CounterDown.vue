@@ -6,8 +6,6 @@ const props = defineProps<{
   seconds: number
 }>()
 
-const total = props.seconds
-const counter = ref(props.seconds)
 const counterMinutes = ref(Math.floor(props.seconds / 60))
 const counterSeconds = ref(props.seconds - counterMinutes.value * 60)
 
@@ -23,29 +21,37 @@ function subMinute() {
   counterMinutes.value = minutes - 1
 }
 
-function subSeconds() {
-  const seconds = counterSeconds.value
+function subSeconds(number: number) {
+  const seconds = counterSeconds.value - number
   const minutes = counterMinutes.value
 
-  if (seconds === 0 && minutes !== 0) {
-    counterSeconds.value = 59
+  if (seconds <= 0 && minutes !== 0) {
+    counterSeconds.value = 59 + seconds
     subMinute()
     return
   }
 
   if (seconds > 0) {
-    counterSeconds.value = seconds - 1
+    counterSeconds.value = seconds
+    return
   }
+
+  counterSeconds.value = 0
 }
 
 async function loop() {
   for (let index = props.seconds; index > 0; index--) {
-    counter.value -= 1
-    subSeconds()
+    subSeconds(1)
 
     await delay(1000)
   }
 }
+
+function decreaseCounter(number: number): void {
+  subSeconds(number)
+}
+
+defineExpose({ decreaseCounter })
 </script>
 
 <template>

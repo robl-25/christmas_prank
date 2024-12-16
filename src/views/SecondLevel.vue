@@ -1,20 +1,26 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import TextAnimated from '../components/TextAnimated.vue'
-import NextButton from '../components/NextButton.vue'
 import CounterDown from '../components/CounterDown.vue'
 import { delay } from '../composables/time.ts'
-import { getRandomInt } from '@/composables/random.ts'
 import { getCookie, setCookie } from '@/composables/cookies.ts'
+import InputAnswer from '@/components/InputAnswer.vue'
+import NextButton from '../components/NextButton.vue'
 
-const showElements = ref(Array(10).fill(false))
-const showSadness = ref(false)
-const showHapiness = ref(false)
-const questions = ['Quem é a pessoa mais inteligente?']
-const showTips = getCookie('level2Tips')
+const showElements = ref(Array(9).fill(false))
+const currentPlayer = getCookie('currentPlayer')
+const showRules = getCookie('level2Rules')
+const answerInput = ref()
+const wrongAnswer = ref(false)
+const correctAnswer = ref(false)
 
+const answer = computed(() => answerInput.value?.answer)
 const question = computed(() => {
-  return questions[getRandomInt(0, questions.length - 1)]
+  if (currentPlayer === 'Sandra') {
+    return 'Quem é a sua filha favorita?'
+  }
+
+  return 'Quem é a sua irmã preferida?'
 })
 
 showText()
@@ -22,32 +28,28 @@ showText()
 async function showText() {
   showElements.value[0] = true
 
-  if ([null, undefined, 'true'].includes(showTips)) {
+  if ([null, undefined, 'true'].includes(showRules)) {
     for (let index = 1; index < showElements.value.length; index++) {
       await delay(5000)
       showElements.value[index - 1] = false
       showElements.value[index] = true
     }
 
-    setCookie('level2Tips', 'false')
+    setCookie('level2Rules', 'false')
   } else {
     await delay(5000)
     showElements.value[0] = false
-    showElements.value[9] = true
+    showElements.value[8] = true
   }
 }
 
-function hapinessSelection(scale: number) {
-  const elements = showElements.value
+function submit() {
+  showElements.value[8] = false
 
-  showElements.value[elements.length - 1] = false
-
-  if (scale != 5) {
-    showSadness.value = true
-    showHapiness.value = false
+  if (answer.value.toLowerCase() === 'mariane') {
+    correctAnswer.value = true
   } else {
-    showSadness.value = false
-    showHapiness.value = true
+    wrongAnswer.value = true
   }
 }
 </script>
@@ -69,34 +71,33 @@ function hapinessSelection(scale: number) {
       v-if="showElements[4]"
     />
     <TextAnimated text="Você terá direito à 3 dicas" v-if="showElements[5]" />
-    <TextAnimated text="A primeira dica diminui 10 segundos do seu tempo" v-if="showElements[6]" />
-    <TextAnimated text="A segunda diminui 20 segundos do seu tempo" v-if="showElements[7]" />
-    <TextAnimated text="E a terceira diminui 45 segundos do seu tempo" v-if="showElements[8]" />
+    <TextAnimated text="Cada dica diminui 10 segundos do seu tempo" v-if="showElements[6]" />
+    <TextAnimated text="A última dica diminui 30 segundos do seu tempo" v-if="showElements[7]" />
   </div>
 
-  <div class="text" v-if="showElements[9]">
-    <CounterDown :seconds="10" />
+  <div class="text" v-if="showElements[8]">
+    <div class="menu">
+      <CounterDown :seconds="120" />
+    </div>
     <TextAnimated :text="question" />
     <div class="scale">
-      <button class="button button-1" role="button" @click="hapinessSelection(1)">1</button>
-      <button class="button button-2" role="button" @click="hapinessSelection(2)">2</button>
-      <button class="button button-3" role="button" @click="hapinessSelection(3)">3</button>
-      <button class="button button-4" role="button" @click="hapinessSelection(4)">4</button>
-      <button class="button neonShadow" role="button" @click="hapinessSelection(5)">
-        <span>5</span>
-      </button>
+      <InputAnswer ref="answerInput" />
+    </div>
+    <div class="submit">
+      <button class="button-submit" role="button" @click="submit()">Enviar</button>
     </div>
   </div>
 
-  <div class="result" v-if="showSadness">
+  <div class="result" v-if="wrongAnswer">
     <img src="/office_sad.gif" alt="Office Sad" />
-    <TextAnimated text="Hmm, você não parece animada o suficiente" />
+    <TextAnimated text="Não vale mentir!" />
+    <TextAnimated text="Pela mentira você perdeu a sua vez" />
     <NextButton url="/rules" text="Próxima jogadora" />
   </div>
 
-  <div class="result" v-if="showHapiness">
+  <div class="result" v-if="correctAnswer">
     <img src="/office_party.gif" alt="Office Party" />
-    <TextAnimated text="Gostei da animação" />
+    <TextAnimated text="Correto!!!" />
     <TextAnimated text="Preparada para próxima fase?" />
     <NextButton url="/second-level" text="Próximo nível" />
   </div>
@@ -135,68 +136,19 @@ function hapinessSelection(scale: number) {
   gap: 1rem;
   justify-content: center;
   align-items: center;
-  height: 60vh;
 }
 
-.button {
-  width: 40px;
-}
-
-.button-1 {
-  align-items: center;
-  background-color: #ffe7e7;
-  background-position: 0 0;
-  border: 1px solid #fee0e0;
-  border-radius: 11px;
-  box-sizing: border-box;
-  color: #d33a2c;
-  cursor: pointer;
+.menu {
   display: flex;
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: 33.4929px;
-  list-style: outside url(https://www.smashingmagazine.com/images/bullet.svg) none;
-  padding: 2px 12px;
-  text-align: left;
-  text-decoration: none;
-  text-shadow: none;
-  text-underline-offset: 1px;
-  transition:
-    border 0.2s ease-in-out,
-    box-shadow 0.2s ease-in-out;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  white-space: nowrap;
-  word-break: break-word;
 }
 
-.button-1:active,
-.button-1:hover,
-.button-1:focus {
-  outline: 0;
+.submit {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
 }
 
-.button-1:active {
-  background-color: #d33a2c;
-  box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset;
-  color: #ffffff;
-}
-
-.button-1:hover {
-  background-color: #ffe3e3;
-  border-color: #faa4a4;
-}
-
-.button-1:active:hover,
-.button-1:focus:hover,
-.button-1:focus {
-  background-color: #d33a2c;
-  box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset;
-  color: #ffffff;
-}
-
-.button-2 {
+.button-submit {
   background: linear-gradient(to bottom right, #ef4765, #ff9a5a);
   border: 0;
   border-radius: 12px;
@@ -218,130 +170,17 @@ function hapinessSelection(scale: number) {
   white-space: nowrap;
 }
 
-.button-2:not([disabled]):focus {
+.button-submit:not([disabled]):focus {
   box-shadow:
     0 0 0.25rem rgba(0, 0, 0, 0.5),
     -0.125rem -0.125rem 1rem rgba(239, 71, 101, 0.5),
     0.125rem 0.125rem 1rem rgba(255, 154, 90, 0.5);
 }
 
-.button-2:not([disabled]):hover {
+.button-submit:not([disabled]):hover {
   box-shadow:
     0 0 0.25rem rgba(0, 0, 0, 0.5),
     -0.125rem -0.125rem 1rem rgba(239, 71, 101, 0.5),
     0.125rem 0.125rem 1rem rgba(255, 154, 90, 0.5);
-}
-
-.button-3 {
-  text-align: center;
-  text-transform: uppercase;
-  transition: 0.5s;
-  background-size: 200% auto;
-  color: white;
-  border-radius: 10px;
-  display: block;
-  border: 0px;
-  font-weight: 700;
-  box-shadow: 0px 0px 14px -7px #f09819;
-  background-image: linear-gradient(45deg, #ff512f 0%, #f09819 51%, #ff512f 100%);
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  line-height: 2.5;
-  font-size: 16px;
-}
-
-.button-3:hover {
-  background-position: right center;
-  /* change the direction of the change here */
-  color: #fff;
-  text-decoration: none;
-}
-
-.button-3:active {
-  transform: scale(0.95);
-}
-
-.button-4 {
-  text-align: center;
-  font-family: inherit;
-  font-weight: 500;
-  font-size: 16px;
-  padding: 0.7em 1.4em 0.7em 1.1em;
-  color: white;
-  background: #ad5389;
-  background: linear-gradient(0deg, rgba(20, 167, 62, 1) 0%, rgba(102, 247, 113, 1) 100%);
-  border: none;
-  box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
-  letter-spacing: 0.05em;
-  border-radius: 10px;
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-}
-
-.button-4:hover {
-  box-shadow: 0 0.5em 1.5em -0.5em #14a73e98;
-}
-
-.button-4:active {
-  box-shadow: 0 0.3em 1em -0.5em #14a73e98;
-}
-
-.neonShadow {
-  border: none;
-  border-radius: 10px;
-  transition: 0.3s;
-  background-color: rgba(156, 161, 160, 0.3);
-  animation: glow 1s infinite;
-  transition: 0.5s;
-  width: 45px;
-  cursor: pointer;
-}
-
-span {
-  display: block;
-  width: 100%;
-  height: 100%;
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: 700;
-  padding-top: 15%;
-  padding-right: 2.5%;
-  margin-right: 0px;
-  font-size: 1.2rem;
-  transition: 0.3s;
-  line-height: 2;
-}
-span:hover {
-  transition: 0.3s;
-  font-weight: 700;
-}
-
-.neonShadow:hover {
-  transform: translateX(-20px) rotate(30deg);
-  border-radius: 5px;
-  background-color: #c3bacc;
-  transition: 0.5s;
-}
-
-@keyframes glow {
-  0% {
-    box-shadow:
-      5px 5px 20px rgb(93, 52, 168),
-      -5px -5px 20px rgb(93, 52, 168);
-  }
-
-  50% {
-    box-shadow:
-      5px 5px 20px rgb(81, 224, 210),
-      -5px -5px 20px rgb(81, 224, 210);
-  }
-  100% {
-    box-shadow:
-      5px 5px 20px rgb(93, 52, 168),
-      -5px -5px 20px rgb(93, 52, 168);
-  }
 }
 </style>
