@@ -22,6 +22,11 @@ const router = createRouter({
       name: 'first-level',
       component: () => import('../views/FirstLevel.vue'),
     },
+    {
+      path: '/second-level',
+      name: 'second-level',
+      component: () => import('../views/SecondLevel.vue'),
+    },
   ],
 })
 

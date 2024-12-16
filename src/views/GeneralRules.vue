@@ -28,6 +28,7 @@ if (cookiePlayers) {
 
   setCookie('playersToGo', removeItemOnce(playersToGo, player.value).join(','))
   setCookie('currentPlayer', player.value)
+  setCookie('level2Tipes', 'true')
 }
 
 showText()
