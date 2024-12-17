@@ -27,6 +27,11 @@ const router = createRouter({
       name: 'second-level',
       component: () => import('../views/SecondLevel.vue'),
     },
+    {
+      path: '/third-level',
+      name: 'third-level',
+      component: () => import('../views/ThirdLevel.vue'),
+    },
   ],
 })
 

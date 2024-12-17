@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import TextAnimated from '../components/TextAnimated.vue'
 import CounterDown from '../components/CounterDown.vue'
 import { delay } from '../composables/time.ts'
@@ -15,6 +15,7 @@ const loserPlayers = loserPlayersCookie.split(',')
 const answerInput = ref()
 const wrongAnswer = ref(false)
 const correctAnswer = ref(false)
+const counterElement = ref()!
 
 const answer = computed(() => answerInput.value?.answer)
 const question = computed(() => {
@@ -55,6 +56,15 @@ function submit() {
     setCookie('loserPlayers', loserPlayers.concat([currentPlayer]).join(','))
   }
 }
+
+watch(
+  () => counterElement.value?.finishedTimer,
+  (timer) => {
+    if (timer) {
+      submit()
+    }
+  }
+)
 </script>
 
 <template>
@@ -79,7 +89,7 @@ function submit() {
     <div class="menu">
       <CounterDown :seconds="120" />
     </div>
-    <TextAnimated :text="question" />
+    <TextAnimated :text="question" ref="counterElement" />
     <div class="scale">
       <InputAnswer ref="answerInput" />
     </div>
@@ -99,7 +109,7 @@ function submit() {
     <img src="/office_party.gif" alt="Office Party" />
     <TextAnimated text="Correto!!!" />
     <TextAnimated text="Preparada para próxima fase?" />
-    <NextButton url="/second-level" text="Próximo nível" />
+    <NextButton url="/third-level" text="Próximo nível" />
   </div>
 </template>
 

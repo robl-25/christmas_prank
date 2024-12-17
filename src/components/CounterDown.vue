@@ -8,6 +8,7 @@ const props = defineProps<{
 
 const counterMinutes = ref(Math.floor(props.seconds / 60))
 const counterSeconds = ref(props.seconds - counterMinutes.value * 60)
+const finishedTimer = ref(false)
 
 loop()
 
@@ -45,13 +46,15 @@ async function loop() {
 
     await delay(1000)
   }
+
+  finishedTimer.value = true
 }
 
 function decreaseCounter(number: number): void {
   subSeconds(number)
 }
 
-defineExpose({ decreaseCounter })
+defineExpose({ decreaseCounter, finishedTimer })
 </script>
 
 <template>

@@ -26,6 +26,7 @@ async function showText() {
   setCookie('level2Rules', 'true')
   setCookie('generalRules', 'true')
   setCookie('loserPlayers', '')
+  setCookie('level3Rules', 'true')
 }
 </script>
 
