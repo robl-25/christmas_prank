@@ -7,7 +7,8 @@ yarn run build
 cd dist
 # if you are deploying to a custom domain
 # echo 'www.example.com' > CNAME
-git initgit add -A
+git init
+git add -A
 git commit -m 'deploy'
-git push -f git@github.com:robl-25/christmas_prank.git master:gh-pages
+git push -f git@github.com:robl-25/christmas_prank.git main:gh-pages
 cd -
