@@ -12,7 +12,9 @@ const router = useRouter()
 const cookiePlayers = getCookie('players')
 const cookiePlayersToGo = getCookie('playersToGo')
 const showRulesCookie = getCookie('generalRules')
+const loserPlayersCookie = getCookie('loserPlayers')
 const showRules = ref(true)
+const loserPlayers = loserPlayersCookie?.split(',')
 
 if (!cookiePlayers) {
   router.push({ name: 'home' })
@@ -25,11 +27,17 @@ const player = ref('')
 if (cookiePlayers) {
   const players = cookiePlayers.split(',')
   const playersToGo = cookiePlayersToGo ? cookiePlayersToGo.split(',') : players
-
+  
   player.value = playersToGo[getRandomInt(0, playersToGo.length - 1)]
-
+  
   setCookie('playersToGo', removeItemOnce(playersToGo, player.value).join(','))
   setCookie('currentPlayer', player.value)
+}
+
+const isLoserPlayer = (loserPlayers !== undefined && loserPlayers.includes(player.value))
+
+if (isLoserPlayer) {
+  setCookie('loserPlayers', removeItemOnce(loserPlayers, player.value).join(','))
 }
 
 showText()
@@ -69,7 +77,8 @@ async function showText() {
     <TextAnimated text="Cada uma terá a sua vez de jogar" v-if="showElements[2]" />
     <TextAnimated text="Quando seu nome aparecer na tela é a sua vez" v-if="showElements[3]" />
     <TextAnimated text="Preparadas?" v-if="showElements[4]" />
-    <TextAnimated text="A próxima a jogar é..." v-if="showElements[5]" />
+    <TextAnimated text="Como sou bozinha, vou dar mais uma chance para ..." v-if="isLoserPlayer && showElements[5]" />
+    <TextAnimated text="Quem joga agora é ..." v-if="!isLoserPlayer && showElements[5]" />
     <TextAnimated :text="player" v-if="showElements[6]" />
     <NextButton url="/first-level" text="Começar o jogo" v-if="showButton" />
   </div>

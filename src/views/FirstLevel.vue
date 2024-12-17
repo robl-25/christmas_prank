@@ -3,11 +3,15 @@ import { ref } from 'vue'
 import TextAnimated from '../components/TextAnimated.vue'
 import NextButton from '../components/NextButton.vue'
 import { delay } from '../composables/time.ts'
+import { getCookie, setCookie } from '@/composables/cookies.ts'
 
 const showElements = ref(Array(2).fill(false))
 const showButton = ref(false)
 const showSadness = ref(false)
 const showHapiness = ref(false)
+const loserPlayersCookie = getCookie('loserPlayers') || ''
+const currentPlayer = getCookie('currentPlayer') || ''
+const loserPlayers = loserPlayersCookie.split(',')
 
 showText()
 
@@ -32,6 +36,8 @@ function hapinessSelection(scale: number) {
   if (scale != 5) {
     showSadness.value = true
     showHapiness.value = false
+
+    setCookie('loserPlayers', loserPlayers.concat([currentPlayer]).join(','))
   } else {
     showSadness.value = false
     showHapiness.value = true
@@ -60,7 +66,8 @@ function hapinessSelection(scale: number) {
   <div class="result" v-if="showSadness">
     <img src="/office_sad.gif" alt="Office Sad" />
     <TextAnimated text="Hmm, você não parece animada o suficiente" />
-    <TextAnimated text="Perdeu a vez" />
+    <TextAnimated text="Acho que não quer ganhar presente" />
+    <TextAnimated text="Por isso, você perdeu" />
     <NextButton url="/rules" text="Próxima jogadora" />
   </div>
 

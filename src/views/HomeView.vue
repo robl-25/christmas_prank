@@ -23,8 +23,9 @@ async function showText() {
 
   setCookie('players', 'Viviane,Carol,Sandra')
   setCookie('playersToGo', 'Viviane,Carol,Sandra')
-  setCookie('level2Tipes', 'true')
+  setCookie('level2Rules', 'true')
   setCookie('generalRules', 'true')
+  setCookie('loserPlayers', '')
 }
 </script>
 

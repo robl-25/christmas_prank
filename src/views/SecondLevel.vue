@@ -7,9 +7,11 @@ import { getCookie, setCookie } from '@/composables/cookies.ts'
 import InputAnswer from '@/components/InputAnswer.vue'
 import NextButton from '../components/NextButton.vue'
 
-const showElements = ref(Array(9).fill(false))
-const currentPlayer = getCookie('currentPlayer')
+const showElements = ref(Array(6).fill(false))
+const currentPlayer = getCookie('currentPlayer') || ''
 const showRules = getCookie('level2Rules')
+const loserPlayersCookie = getCookie('loserPlayers') || ''
+const loserPlayers = loserPlayersCookie.split(',')
 const answerInput = ref()
 const wrongAnswer = ref(false)
 const correctAnswer = ref(false)
@@ -39,17 +41,18 @@ async function showText() {
   } else {
     await delay(5000)
     showElements.value[0] = false
-    showElements.value[8] = true
+    showElements.value[5] = true
   }
 }
 
 function submit() {
-  showElements.value[8] = false
+  showElements.value[5] = false
 
   if (answer.value.toLowerCase() === 'mariane') {
     correctAnswer.value = true
   } else {
     wrongAnswer.value = true
+    setCookie('loserPlayers', loserPlayers.concat([currentPlayer]).join(','))
   }
 }
 </script>
@@ -70,12 +73,9 @@ function submit() {
       text="Para pessoas com nome composto, é preciso digitar o nome composto"
       v-if="showElements[4]"
     />
-    <TextAnimated text="Você terá direito à 3 dicas" v-if="showElements[5]" />
-    <TextAnimated text="Cada dica diminui 10 segundos do seu tempo" v-if="showElements[6]" />
-    <TextAnimated text="A última dica diminui 30 segundos do seu tempo" v-if="showElements[7]" />
   </div>
 
-  <div class="text" v-if="showElements[8]">
+  <div class="text" v-if="showElements[5]">
     <div class="menu">
       <CounterDown :seconds="120" />
     </div>
@@ -91,7 +91,7 @@ function submit() {
   <div class="result" v-if="wrongAnswer">
     <img src="/office_sad.gif" alt="Office Sad" />
     <TextAnimated text="Não vale mentir!" />
-    <TextAnimated text="Pela mentira você perdeu a sua vez" />
+    <TextAnimated text="Pela mentira você perdeu" />
     <NextButton url="/rules" text="Próxima jogadora" />
   </div>
 
