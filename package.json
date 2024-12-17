@@ -13,7 +13,7 @@
     "lint:oxlint": "oxlint . --fix -D correctness --ignore-path .gitignore",
     "lint:eslint": "eslint . --fix",
     "lint": "run-s lint:*",
-    "format": "prettier --write src/"
+    "deploy": "sh deploy.sh"
   },
   "dependencies": {
     "vue": "^3.5.13",
