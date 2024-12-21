@@ -23,9 +23,6 @@ if (!cookiePlayers) {
 const showElements = ref(Array(7).fill(false))
 const showButton = ref(false)
 const player = ref('')
-const playDrumElement = ref()
-const playStyleDisplay = ref('contents')
-const playYayElement = ref()
 
 if (cookiePlayers) {
   const players = cookiePlayers.split(',')
@@ -69,27 +66,6 @@ async function showText() {
 
   showButton.value = true
 }
-
-watch(playDrumElement, (element, _) => {
-  element?.click()
-})
-
-watch(playYayElement, (element, _) => {
-  element?.click()
-})
-
-function playMusic() {
-  const promise = document.querySelector('audio')?.play()
-
-  if (promise !== undefined) {
-    promise.then(_ => {
-      // Autoplay started!
-      playStyleDisplay.value = 'contents'
-    }).catch(_ => {
-      playStyleDisplay.value = 'block'
-    });
-  }
-}
 </script>
 
 <template>
@@ -101,11 +77,11 @@ function playMusic() {
     <TextAnimated text="Cada uma terá a sua vez de jogar" v-if="showElements[2]" />
     <TextAnimated text="Quando seu nome aparecer na tela, é a sua vez" v-if="showElements[3]" />
     <TextAnimated text="Preparadas?" v-if="showElements[4]" />
-    <PlayAudio audioFile="/drum_roll.mp3" v-if="showElements[5]" />
+    <PlayAudio file="/drum_roll.mp3" v-if="showElements[5]" />
     <TextAnimated text="Como sou bozinha, vou dar mais uma chance para ..." v-if="isLoserPlayer && showElements[5]" />
     <TextAnimated text="Quem joga agora é ..." v-if="!isLoserPlayer && showElements[5]" />
     <TextAnimated :text="player" v-if="showElements[6]" />
-    <PlayAudio audioFile="/crowd_yay_applause.mp3" v-if="showElements[6]" />
+    <PlayAudio file="/crowd_yay_applause.mp3" v-if="showElements[6]" />
     <NextButton url="/first-level" text="Começar o jogo" v-if="showButton" />
   </div>
 </template>

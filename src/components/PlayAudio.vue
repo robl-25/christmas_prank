@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 
 const props = defineProps<{
-  audioFile: string
+  file: string
 }>()
 
 const playerButtonElement = ref()
@@ -37,6 +37,6 @@ function playMusic() {
     :style="{ display: playerButtonDisplay }"
   >
   <audio loop ref="audioElement">
-    <source :src="audioFile" type="audio/mpeg"></source>
+    <source :src="file" type="audio/mpeg"></source>
   </audio>
 </template>
