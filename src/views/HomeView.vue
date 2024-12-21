@@ -12,6 +12,8 @@ const showButton = ref(false)
 showText()
 
 async function showText() {
+  showElements.value[0] = true
+
   for (let index = 1; index < showElements.value.length; index++) {
     await delay(5000)
     showElements.value[index - 1] = false
