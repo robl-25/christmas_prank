@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import TextAnimated from '../components/TextAnimated.vue'
 import NextButton from '../components/NextButton.vue'
 import { delay } from '../composables/time.ts'
-import { setCookie, getCookie } from '../composables/cookies.ts'
 import { getRandomInt } from '../composables/random.ts'
 import { removeItemOnce } from '../composables/array.ts'
+import PlayAudio from '@/components/PlayAudio.vue'
 
 const router = useRouter()
-const cookiePlayers = getCookie('players')
-const cookiePlayersToGo = getCookie('playersToGo')
-const showRulesCookie = getCookie('generalRules')
-const loserPlayersCookie = getCookie('loserPlayers')
+const cookiePlayers = localStorage.getItem('players')
+const cookiePlayersToGo = localStorage.getItem('playersToGo')
+const showRulesCookie = localStorage.getItem('generalRules')
+const loserPlayersCookie = localStorage.getItem('loserPlayers')
 const showRules = ref(true)
 const loserPlayers = loserPlayersCookie?.split(',')
 
@@ -23,6 +23,9 @@ if (!cookiePlayers) {
 const showElements = ref(Array(7).fill(false))
 const showButton = ref(false)
 const player = ref('')
+const playDrumElement = ref()
+const playStyleDisplay = ref('contents')
+const playYayElement = ref()
 
 if (cookiePlayers) {
   const players = cookiePlayers.split(',')
@@ -30,14 +33,14 @@ if (cookiePlayers) {
   
   player.value = playersToGo[getRandomInt(0, playersToGo.length - 1)]
   
-  setCookie('playersToGo', removeItemOnce(playersToGo, player.value).join(','))
-  setCookie('currentPlayer', player.value)
+  localStorage.setItem('playersToGo', removeItemOnce(playersToGo, player.value).join(','))
+  localStorage.setItem('currentPlayer', player.value)
 }
 
 const isLoserPlayer = (loserPlayers !== undefined && loserPlayers.includes(player.value))
 
 if (isLoserPlayer) {
-  setCookie('loserPlayers', removeItemOnce(loserPlayers, player.value).join(','))
+  localStorage.setItem('loserPlayers', removeItemOnce(loserPlayers, player.value).join(','))
 }
 
 showText()
@@ -52,7 +55,7 @@ async function showText() {
       showElements.value[index] = true
     }
 
-    setCookie('generalRules', 'false')
+    localStorage.setItem('generalRules', 'false')
   } else {
     showRules.value = false
     showElements.value[5] = true
@@ -66,6 +69,27 @@ async function showText() {
 
   showButton.value = true
 }
+
+watch(playDrumElement, (element, _) => {
+  element?.click()
+})
+
+watch(playYayElement, (element, _) => {
+  element?.click()
+})
+
+function playMusic() {
+  const promise = document.querySelector('audio')?.play()
+
+  if (promise !== undefined) {
+    promise.then(_ => {
+      // Autoplay started!
+      playStyleDisplay.value = 'contents'
+    }).catch(_ => {
+      playStyleDisplay.value = 'block'
+    });
+  }
+}
 </script>
 
 <template>
@@ -75,11 +99,13 @@ async function showText() {
     <TextAnimated text="Vocês precisam passar por 3 níveis para vencer" v-if="showElements[0]" />
     <TextAnimated text="Caso vocês percam, ficam sem presente &#128520;" v-if="showElements[1]" />
     <TextAnimated text="Cada uma terá a sua vez de jogar" v-if="showElements[2]" />
-    <TextAnimated text="Quando seu nome aparecer na tela é a sua vez" v-if="showElements[3]" />
+    <TextAnimated text="Quando seu nome aparecer na tela, é a sua vez" v-if="showElements[3]" />
     <TextAnimated text="Preparadas?" v-if="showElements[4]" />
+    <PlayAudio audioFile="/drum_roll.mp3" v-if="showElements[5]" />
     <TextAnimated text="Como sou bozinha, vou dar mais uma chance para ..." v-if="isLoserPlayer && showElements[5]" />
     <TextAnimated text="Quem joga agora é ..." v-if="!isLoserPlayer && showElements[5]" />
     <TextAnimated :text="player" v-if="showElements[6]" />
+    <PlayAudio audioFile="/crowd_yay_applause.mp3" v-if="showElements[6]" />
     <NextButton url="/first-level" text="Começar o jogo" v-if="showButton" />
   </div>
 </template>
