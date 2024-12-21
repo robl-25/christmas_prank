@@ -4,6 +4,7 @@ import LogoItem from '../components/LogoItem.vue'
 import TextAnimated from '../components/TextAnimated.vue'
 import NextButton from '../components/NextButton.vue'
 import { delay } from '../composables/time.ts'
+import PlayAudio from '@/components/PlayAudio.vue'
 
 const showFirst = ref(true)
 const showSecond = ref(false)
@@ -35,6 +36,8 @@ async function showText() {
     <div class="logo">
       <LogoItem />
     </div>
+
+    <PlayAudio file="christmas_song.mp3" />
 
     <div class="text">
       <TextAnimated
