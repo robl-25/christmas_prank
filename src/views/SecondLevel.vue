@@ -5,6 +5,7 @@ import CounterDown from '../components/CounterDown.vue'
 import { delay } from '../composables/time.ts'
 import InputAnswer from '@/components/InputAnswer.vue'
 import NextButton from '../components/NextButton.vue'
+import PlayAudio from '@/components/PlayAudio.vue'
 
 const showElements = ref(Array(6).fill(false))
 const currentPlayer = localStorage.getItem('currentPlayer') || ''
@@ -98,6 +99,7 @@ watch(
   </div>
 
   <div class="result" v-if="wrongAnswer">
+    <PlayAudio file="/aww.mp3" />
     <img src="/office_sad.gif" alt="Office Sad" />
     <TextAnimated text="Não vale mentir!" />
     <TextAnimated text="Pela mentira você perdeu" />
@@ -105,6 +107,7 @@ watch(
   </div>
 
   <div class="result" v-if="correctAnswer">
+    <PlayAudio file="/pleased_crowd.mp3" />
     <img src="/office_party.gif" alt="Office Party" />
     <TextAnimated text="Correto!!!" />
     <TextAnimated text="Preparada para próxima fase?" />

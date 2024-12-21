@@ -6,19 +6,18 @@ import NextButton from '../components/NextButton.vue'
 import { delay } from '../composables/time.ts'
 import PlayAudio from '@/components/PlayAudio.vue'
 
-const showFirst = ref(true)
-const showSecond = ref(false)
+const showElements = ref(Array(3).fill(false))
 const showButton = ref(false)
 
 showText()
 
 async function showText() {
-  await delay(5000)
-  showFirst.value = false
-  showSecond.value = true
+  for (let index = 1; index < showElements.value.length; index++) {
+    await delay(5000)
+    showElements.value[index - 1] = false
+    showElements.value[index] = true
+  }
 
-  await delay(5000)
-  showSecond.value = false
   showButton.value = true
 
   localStorage.setItem('players', 'Viviane,Carol,Sandra')
@@ -37,14 +36,15 @@ async function showText() {
       <LogoItem />
     </div>
 
-    <PlayAudio file="christmas_song.mp3" />
+    <PlayAudio file="xmas_bells.mp3" />
 
     <div class="text">
+      <TextAnimated text="Ative o som para melhor experiência" v-if="showElements[0]" />
       <TextAnimated
         :text="'Bem-vindas ao jogo de perguntas e respostas que te dá um presente de natal'"
-        v-if="showFirst"
+        v-if="showElements[1]"
       />
-      <TextAnimated :text="'Caso vocês vençam! &#128527;'" v-if="showSecond" />
+      <TextAnimated text="Caso vocês vençam! &#128527;" v-if="showElements[2]" />
       <NextButton url="/rules" text="Começar o jogo" v-if="showButton" />
     </div>
   </div>

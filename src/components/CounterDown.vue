@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { delay } from '@/composables/time'
 import { ref } from 'vue'
+import PlayAudio from '@/components/PlayAudio.vue'
 
 const props = defineProps<{
   seconds: number
@@ -63,6 +64,8 @@ defineExpose({ decreaseCounter, finishedTimer })
     <div class="separator">:</div>
     <div class="seconds">{{ counterSeconds < 10 ? '0' : '' }}{{ counterSeconds }}</div>
   </div>
+  
+  <PlayAudio file="/clock_sound.mp3" />
 </template>
 
 <style lang="scss" scoped>

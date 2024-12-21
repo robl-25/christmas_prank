@@ -7,6 +7,7 @@ import InputAnswer from '@/components/InputAnswer.vue'
 import NextButton from '../components/NextButton.vue'
 import { getRandomInt } from '@/composables/random.ts'
 import { removeItemOnce } from '@/composables/array.ts'
+import PlayAudio from '@/components/PlayAudio.vue'
 
 const showElements = ref(Array(6).fill(false))
 const currentPlayer = localStorage.getItem('currentPlayer') || ''
@@ -83,6 +84,11 @@ const questions = [
   },
 ]
 const counterElement = ref()!
+const showLastQuestion = computed(() => {
+  return (localStorage.getItem('players') === '') || 
+    (players.length === 1 && players[0] === currentPlayer)
+})
+const showQuestion = ref(Array(6).fill(false))
 
 const answer = computed(() => answerInput.value?.answer)
 const questionIndex = computed(() => {
@@ -103,8 +109,22 @@ async function showText() {
 
     localStorage.setItem('level3Rules', 'false')
   } else {
+    if (showLastQuestion.value) {
+      await delay(5000)
+      showElements.value[0] = false
+      showQuestion.value[0] = true
+
+      let index = 1
+
+      for (index = 1; index < showQuestion.value.length; index++) {
+        await delay(5000)
+        showQuestion.value[index - 1] = false
+        showQuestion.value[index] = true
+      }
+    }
+
     await delay(5000)
-    showElements.value[0] = false
+    showQuestion.value[showQuestion.value.length - 1] = false
     showElements.value[5] = true
   }
 }
@@ -124,6 +144,7 @@ async function submit() {
       wrongAnswer.value = false
       showPresents.value = true
       showPresentsText.value[0] = true
+      await delay(5000)
 
       for (let index = 1; index < showPresentsText.value.length; index++) {
         await delay(5000)
@@ -158,6 +179,15 @@ watch(
     />
     <TextAnimated text="Este é o último nível" v-if="showElements[2]" />
     <TextAnimated text="Se você ganhar, ganhará um presente maravilhoso" v-if="showElements[3]" />
+
+    <div v-if="showLastQuestion">
+      <TextAnimated text="Parece que você é a última a jogar e ninguém passou deste nível até agora" v-if="showQuestion[0]" />
+      <TextAnimated text="Então, vou diminuir a dificuldade deste nível" v-if="showQuestion[1]" />
+      <TextAnimated text="Somente para você, valendo 3 presentes:" v-if="showQuestion[2]" />
+      <TextAnimated text="Imagine que você está em um avião com outras 36 pessoas sentadas" v-if="showQuestion[3]" />
+      <TextAnimated text="Metade se levanta e sai do avião" v-if="showQuestion[4]" />
+      <TextAnimated text="Do restante, metade se levanta e se prepara para sair do avião" v-if="showQuestion[5]" />
+    </div>
   </div>
 
   <div class="text" v-if="showElements[5]">
@@ -174,6 +204,7 @@ watch(
   </div>
 
   <div class="result" v-if="wrongAnswer">
+    <PlayAudio file="/fail_jingle_stereo.mp3" />
     <img src="/office_sad.gif" alt="Office Sad" />
     <TextAnimated text="Hmm, não era essa a resposta" />
     <TextAnimated text="Você chegou tão perto, mas perdeu mesmo assim" />
@@ -181,18 +212,21 @@ watch(
   </div>
 
   <div class="result" v-if="showPresents">
+    <PlayAudio file="/sci_fi_warning_alert.mp3" v-if="showPresentsText[0]" />
     <TextAnimated text="Espera aí, não acabou" v-if="showPresentsText[0]"/>
     <TextAnimated text="Vocês chegaram tão perto, mas ninguém ganhou" v-if="showPresentsText[1]" />
     <TextAnimated text="Como estamos em espirito natalino" v-if="showPresentsText[2]" />
     <TextAnimated text="Vou fazer uma boa ação" v-if="showPresentsText[3]" />
     <TextAnimated text="Vou sortear os presentes de vocês" v-if="showPresentsText[4]" />
     <TextAnimated text="O resultado é ..." v-if="showPresentsText[5]" />
+    <PlayAudio file="/christmas_song.mp3" v-if="showPresentsText[6]" />
     <TextAnimated text="Sandra, você ganhou o presente 3" v-if="showPresentsText[6]" />
     <TextAnimated text="Carol, você ganhou o presente 1" v-if="showPresentsText[6]" />
     <TextAnimated text="Viviane, você ganhou o presente 2" v-if="showPresentsText[6]" />
   </div>
 
   <div class="result" v-if="correctAnswer">
+    <PlayAudio file="/pleased_crowd.mp3" />
     <img src="/office_party.gif" alt="Office Party" />
     <TextAnimated text="Correto!!!" />
     <TextAnimated text="Parabéns!!" />
