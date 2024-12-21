@@ -4,7 +4,6 @@ import LogoItem from '../components/LogoItem.vue'
 import TextAnimated from '../components/TextAnimated.vue'
 import NextButton from '../components/NextButton.vue'
 import { delay } from '../composables/time.ts'
-import { setCookie } from '../composables/cookies.ts'
 
 const showFirst = ref(true)
 const showSecond = ref(false)
@@ -21,13 +20,13 @@ async function showText() {
   showSecond.value = false
   showButton.value = true
 
-  setCookie('players', 'Viviane,Carol,Sandra')
-  setCookie('playersToGo', 'Viviane,Carol,Sandra')
-  setCookie('level2Rules', 'true')
-  setCookie('generalRules', 'true')
-  setCookie('loserPlayers', '')
-  setCookie('level3Rules', 'true')
-  setCookie('level3Losers', '')
+  localStorage.setItem('players', 'Viviane,Carol,Sandra')
+  localStorage.setItem('playersToGo', 'Viviane,Carol,Sandra')
+  localStorage.setItem('level2Rules', 'true')
+  localStorage.setItem('generalRules', 'true')
+  localStorage.setItem('loserPlayers', '')
+  localStorage.setItem('level3Rules', 'true')
+  localStorage.setItem('level3Losers', '')
 }
 </script>
 

@@ -3,14 +3,13 @@ import { computed, ref, watch } from 'vue'
 import TextAnimated from '../components/TextAnimated.vue'
 import CounterDown from '../components/CounterDown.vue'
 import { delay } from '../composables/time.ts'
-import { getCookie, setCookie } from '@/composables/cookies.ts'
 import InputAnswer from '@/components/InputAnswer.vue'
 import NextButton from '../components/NextButton.vue'
 
 const showElements = ref(Array(6).fill(false))
-const currentPlayer = getCookie('currentPlayer') || ''
-const showRules = getCookie('level2Rules')
-const loserPlayersCookie = getCookie('loserPlayers') || ''
+const currentPlayer = localStorage.getItem('currentPlayer') || ''
+const showRules = localStorage.getItem('level2Rules')
+const loserPlayersCookie = localStorage.getItem('loserPlayers') || ''
 const loserPlayers = loserPlayersCookie.split(',')
 const answerInput = ref()
 const wrongAnswer = ref(false)
@@ -38,7 +37,7 @@ async function showText() {
       showElements.value[index] = true
     }
 
-    setCookie('level2Rules', 'false')
+    localStorage.setItem('level2Rules', 'false')
   } else {
     await delay(5000)
     showElements.value[0] = false
@@ -53,7 +52,7 @@ function submit() {
     correctAnswer.value = true
   } else {
     wrongAnswer.value = true
-    setCookie('loserPlayers', loserPlayers.concat([currentPlayer]).join(','))
+    localStorage.setItem('loserPlayers', loserPlayers.concat([currentPlayer]).join(','))
   }
 }
 

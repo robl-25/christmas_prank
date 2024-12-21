@@ -3,14 +3,14 @@ import { ref } from 'vue'
 import TextAnimated from '../components/TextAnimated.vue'
 import NextButton from '../components/NextButton.vue'
 import { delay } from '../composables/time.ts'
-import { getCookie, setCookie } from '@/composables/cookies.ts'
+import PlayAudio from '@/components/PlayAudio.vue'
 
 const showElements = ref(Array(2).fill(false))
 const showButton = ref(false)
 const showSadness = ref(false)
 const showHapiness = ref(false)
-const loserPlayersCookie = getCookie('loserPlayers') || ''
-const currentPlayer = getCookie('currentPlayer') || ''
+const loserPlayersCookie = localStorage.getItem('loserPlayers') || ''
+const currentPlayer = localStorage.getItem('currentPlayer') || ''
 const loserPlayers = loserPlayersCookie.split(',')
 
 showText()
@@ -37,7 +37,7 @@ function hapinessSelection(scale: number) {
     showSadness.value = true
     showHapiness.value = false
 
-    setCookie('loserPlayers', loserPlayers.concat([currentPlayer]).join(','))
+    localStorage.setItem('loserPlayers', loserPlayers.concat([currentPlayer]).join(','))
   } else {
     showSadness.value = false
     showHapiness.value = true
@@ -64,6 +64,7 @@ function hapinessSelection(scale: number) {
   </div>
 
   <div class="result" v-if="showSadness">
+    <PlayAudio audioFile="/aww.mp3" />
     <img src="/office_sad.gif" alt="Office Sad" />
     <TextAnimated text="Hmm, você não parece animada o suficiente" />
     <TextAnimated text="Acho que não quer ganhar presente" />
@@ -72,6 +73,7 @@ function hapinessSelection(scale: number) {
   </div>
 
   <div class="result" v-if="showHapiness">
+    <PlayAudio audioFile="/pleased_crowd.mp3" />
     <img src="/office_party.gif" alt="Office Party" />
     <TextAnimated text="Gostei da animação" />
     <TextAnimated text="Preparada para próxima fase?" />

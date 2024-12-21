@@ -3,18 +3,17 @@ import { computed, ref, watch } from 'vue'
 import TextAnimated from '../components/TextAnimated.vue'
 import CounterDown from '../components/CounterDown.vue'
 import { delay } from '../composables/time.ts'
-import { getCookie, setCookie } from '@/composables/cookies.ts'
 import InputAnswer from '@/components/InputAnswer.vue'
 import NextButton from '../components/NextButton.vue'
 import { getRandomInt } from '@/composables/random.ts'
 import { removeItemOnce } from '@/composables/array.ts'
 
 const showElements = ref(Array(6).fill(false))
-const currentPlayer = getCookie('currentPlayer') || ''
-const showRules = getCookie('level2Rules')
-const loserPlayersCookie = getCookie('level3Losers') || ''
+const currentPlayer = localStorage.getItem('currentPlayer') || ''
+const showRules = localStorage.getItem('level2Rules')
+const loserPlayersCookie = localStorage.getItem('level3Losers') || ''
 const loserPlayers = loserPlayersCookie.split(',')
-const players = getCookie('players')?.split(',') || []
+const players = localStorage.getItem('players')?.split(',') || []
 const answerInput = ref()
 const wrongAnswer = ref(false)
 const correctAnswer = ref(false)
@@ -102,7 +101,7 @@ async function showText() {
       showElements.value[index] = true
     }
 
-    setCookie('level3Rules', 'false')
+    localStorage.setItem('level3Rules', 'false')
   } else {
     await delay(5000)
     showElements.value[0] = false
@@ -117,10 +116,10 @@ async function submit() {
     correctAnswer.value = true
   } else {
     wrongAnswer.value = true
-    setCookie('level3Losers', loserPlayers.concat([currentPlayer]).join(','))
-    setCookie('players', removeItemOnce(players, currentPlayer).join(','))
+    localStorage.setItem('level3Losers', loserPlayers.concat([currentPlayer]).join(','))
+    localStorage.setItem('players', removeItemOnce(players, currentPlayer).join(','))
 
-    if (getCookie('players') === '') {
+    if (localStorage.getItem('players') === '') {
       await delay(5000)
       wrongAnswer.value = false
       showPresents.value = true
