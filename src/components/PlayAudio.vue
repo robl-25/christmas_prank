@@ -8,7 +8,6 @@ const props = defineProps<{
 const playerButtonElement = ref()
 const playerButtonDisplay = ref('contents')
 const audioElement = ref()
-const error = ref('')
 
 onMounted(() => {
   playerButtonElement.value.click()
@@ -19,14 +18,13 @@ function playMusic() {
 
   if (promise !== undefined) {
     promise
-      .then((_: unknown) => {
+      .then(() => {
         // Autoplay started!
         playerButtonDisplay.value = 'contents'
       })
-      .catch((err: { message: string }) => {
+      .catch(() => {
         // Error to autostart. Show button for user to click to start audio
         playerButtonDisplay.value = 'block'
-        error.value = err.message
       })
   }
 }
@@ -36,9 +34,7 @@ function playMusic() {
   <input type="button" value="Play" ref="playerButtonElement" @click="playMusic()" class="button" />
   <audio controls loop autoplay ref="audioElement" :style="{ display: playerButtonDisplay }">
     <source :src="file" type="audio/mpeg" />
-    Your browser does not support the audio tag.
   </audio>
-  {{ error }}
 </template>
 
 <style lang="scss" scoped>
