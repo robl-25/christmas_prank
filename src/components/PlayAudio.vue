@@ -5,7 +5,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <audio controls loop autoplay ref="audioElement">
+  <audio controls loop autoplay ref="audioElement" :style="{ display: 'contents' }">
     <source :src="file" type="audio/mpeg" />
   </audio>
 </template>
