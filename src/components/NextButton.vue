@@ -1,17 +1,18 @@
 <script setup lang="ts">
-const props = defineProps<{ url: string, text: string }>()
+const props = defineProps<{ url?: string; text: string }>()
 </script>
 
 <template>
   <div class="button-container">
-    <RouterLink :to="props.url" class="button-85">{{ props.text }}</RouterLink>
+    <RouterLink :to="props.url" class="button-85" v-if="props.url">{{ props.text }}</RouterLink>
+    <button class="button-85" v-else>{{ props.text }}</button>
   </div>
 </template>
 
 <style lang="css" scoped>
 .button-container {
-    text-align: center;
-    margin-top: 2rem;
+  text-align: center;
+  margin-top: 2rem;
 }
 
 .button-85 {
@@ -30,7 +31,7 @@ const props = defineProps<{ url: string, text: string }>()
 }
 
 .button-85:before {
-  content: "";
+  content: '';
   background: linear-gradient(
     45deg,
     #ff0000,
@@ -71,7 +72,7 @@ const props = defineProps<{ url: string, text: string }>()
 
 .button-85:after {
   z-index: -1;
-  content: "";
+  content: '';
   position: absolute;
   width: 100%;
   height: 100%;
