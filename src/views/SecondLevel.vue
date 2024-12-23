@@ -17,7 +17,7 @@ const wrongAnswer = ref(false)
 const correctAnswer = ref(false)
 const counterElement = ref()!
 
-const answer = computed(() => answerInput.value?.answer)
+const answer = ref('')
 const question = computed(() => {
   if (currentPlayer === 'Sandra') {
     return 'Quem é a sua filha favorita?'
@@ -29,6 +29,10 @@ const question = computed(() => {
 showText()
 
 async function showText() {
+  if (loserPlayers.includes(currentPlayer)) {
+    return submit()
+  }
+
   showElements.value[0] = true
 
   if ([null, undefined, 'true'].includes(showRules)) {
@@ -48,6 +52,7 @@ async function showText() {
 
 function submit() {
   showElements.value[5] = false
+  answer.value = answerInput.value?.answer || ''
 
   if (answer.value.toLowerCase() === 'mariane') {
     correctAnswer.value = true
@@ -63,7 +68,7 @@ watch(
     if (timer) {
       submit()
     }
-  }
+  },
 )
 </script>
 
