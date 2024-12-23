@@ -34,7 +34,7 @@ function playMusic() {
 
 <template>
   <input type="button" value="Play" ref="playerButtonElement" @click="playMusic()" class="button" />
-  <audio controls loop ref="audioElement" :style="{ display: playerButtonDisplay }">
+  <audio controls loop autoplay ref="audioElement" :style="{ display: playerButtonDisplay }">
     <source :src="file" type="audio/mpeg" />
     Your browser does not support the audio tag.
   </audio>
