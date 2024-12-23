@@ -254,6 +254,14 @@ watch(
     <TextAnimated text="Carol, você ganhou o presente 1" v-if="showPresentsText[7]" />
     <NextButton text="Próximo presente" @click="showNext(8)" v-if="showPresentsText[7]" />
     <TextAnimated text="Viviane, você ganhou o presente 2" v-if="showPresentsText[8]" />
+    <TextAnimated
+      text="Contudo esse presente, infelizemente não chegou a tempo."
+      v-if="showPresentsText[8]"
+    />
+    <TextAnimated
+      text="Mas não se preocupe, ele está à caminho e será maravilhoso &#128513;"
+      v-if="showPresentsText[8]"
+    />
   </div>
 
   <div class="result" v-if="correctAnswer">
