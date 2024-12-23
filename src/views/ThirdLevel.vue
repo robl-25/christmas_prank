@@ -13,14 +13,14 @@ const showElements = ref(Array(6).fill(false))
 const currentPlayer = localStorage.getItem('currentPlayer') || ''
 const showRules = localStorage.getItem('level2Rules')
 const loserPlayersCookie = localStorage.getItem('level3Losers') || ''
-const loserPlayers = loserPlayersCookie.split(',')
+const loserPlayers = loserPlayersCookie.split(',') || []
 const players = localStorage.getItem('players')?.split(',') || []
 const answerInput = ref()
 const wrongAnswer = ref(false)
 const correctAnswer = ref(false)
 const showWrongAnswerButton = ref(false)
 const showPresents = ref(false)
-const showPresentsText = ref(Array(7).fill(false))
+const showPresentsText = ref(Array(6).fill(false))
 const questions = [
   {
     question: 'Qual o último elemento da tabela periódica?',
@@ -39,7 +39,8 @@ const questions = [
     answer: '1669,8 km/h',
   },
   {
-    question: 'Qual ativista, agente secreto e empreendedor francês tem uma Cheeta como pet que se chama Chiquita?',
+    question:
+      'Qual ativista, agente secreto e empreendedor francês tem uma Cheeta como pet que se chama Chiquita?',
     answer: 'Josephine Baker',
   },
   {
@@ -85,12 +86,13 @@ const questions = [
 ]
 const counterElement = ref()!
 const showLastQuestion = computed(() => {
-  return (localStorage.getItem('players') === '') || 
-    (players.length === 1 && players[0] === currentPlayer)
+  return (
+    localStorage.getItem('players') === '' || (players.length === 1 && players[0] === currentPlayer)
+  )
 })
 const showQuestion = ref(Array(6).fill(false))
 
-const answer = computed(() => answerInput.value?.answer)
+const answer = ref('')
 const questionIndex = computed(() => {
   return getRandomInt(0, questions.length)
 })
@@ -98,6 +100,10 @@ const questionIndex = computed(() => {
 showText()
 
 async function showText() {
+  if (loserPlayers.includes(currentPlayer)) {
+    return submit()
+  }
+
   showElements.value[0] = true
 
   if ([null, undefined, 'true'].includes(showRules)) {
@@ -124,6 +130,7 @@ async function showText() {
     }
 
     await delay(5000)
+    showElements.value[0] = false
     showQuestion.value[showQuestion.value.length - 1] = false
     showElements.value[5] = true
   }
@@ -131,30 +138,42 @@ async function showText() {
 
 async function submit() {
   showElements.value[5] = false
+  answer.value = answerInput.value?.answer || ''
 
   if (answer.value.toLowerCase() === questions[questionIndex.value].answer.toLocaleLowerCase()) {
     correctAnswer.value = true
   } else {
     wrongAnswer.value = true
-    localStorage.setItem('level3Losers', loserPlayers.concat([currentPlayer]).join(','))
-    localStorage.setItem('players', removeItemOnce(players, currentPlayer).join(','))
 
-    if (localStorage.getItem('players') === '') {
-      await delay(5000)
-      wrongAnswer.value = false
-      showPresents.value = true
-      showPresentsText.value[0] = true
-      await delay(5000)
+    if (!loserPlayers.includes(currentPlayer)) {
+      localStorage.setItem('level3Losers', loserPlayers.concat([currentPlayer]).join(','))
+    }
 
-      for (let index = 1; index < showPresentsText.value.length; index++) {
-        await delay(5000)
-        showPresentsText.value[index - 1] = false
-        showPresentsText.value[index] = true
-      }
-    } else {
-      showWrongAnswerButton.value = true
+    if (players.includes(currentPlayer)) {
+      localStorage.setItem('players', removeItemOnce(players, currentPlayer).join(','))
     }
   }
+
+  if (localStorage.getItem('players') === '') {
+    await delay(5000)
+    wrongAnswer.value = false
+    showPresents.value = true
+    showPresentsText.value[0] = true
+    await delay(5000)
+
+    for (let index = 1; index < 7; index++) {
+      await delay(5000)
+      showPresentsText.value[index - 1] = false
+      showPresentsText.value[index] = true
+    }
+  } else {
+    showWrongAnswerButton.value = true
+  }
+}
+
+function showNext(index: number) {
+  showPresentsText.value[index - 1] = false
+  showPresentsText.value[index] = true
 }
 
 watch(
@@ -163,7 +182,7 @@ watch(
     if (timer) {
       submit()
     }
-  }
+  },
 )
 </script>
 
@@ -173,20 +192,26 @@ watch(
   </div>
 
   <div class="text">
-    <TextAnimated
-      text="Este nível testará seus conhecimentos gerais"
-      v-if="showElements[1]"
-    />
+    <TextAnimated text="Este nível testará seus conhecimentos gerais" v-if="showElements[1]" />
     <TextAnimated text="Este é o último nível" v-if="showElements[2]" />
     <TextAnimated text="Se você ganhar, ganhará um presente maravilhoso" v-if="showElements[3]" />
 
     <div v-if="showLastQuestion">
-      <TextAnimated text="Parece que você é a última a jogar e ninguém passou deste nível até agora" v-if="showQuestion[0]" />
-      <TextAnimated text="Então, vou diminuir a dificuldade deste nível" v-if="showQuestion[1]" />
-      <TextAnimated text="Somente para você, valendo 3 presentes:" v-if="showQuestion[2]" />
-      <TextAnimated text="Imagine que você está em um avião com outras 36 pessoas sentadas" v-if="showQuestion[3]" />
+      <TextAnimated
+        text="Parece que você é a última a jogar e ninguém passou deste nível até agora"
+        v-if="showQuestion[0]"
+      />
+      <TextAnimated text="Então, vou diminuir a dificuldade" v-if="showQuestion[1]" />
+      <TextAnimated text="Somente para você, valendo todos os presentes:" v-if="showQuestion[2]" />
+      <TextAnimated
+        text="Imagine que você está em um avião com outras 36 pessoas sentadas"
+        v-if="showQuestion[3]"
+      />
       <TextAnimated text="Metade se levanta e sai do avião" v-if="showQuestion[4]" />
-      <TextAnimated text="Do restante, metade se levanta e se prepara para sair do avião" v-if="showQuestion[5]" />
+      <TextAnimated
+        text="Do restante, metade se levanta e se prepara para sair do avião"
+        v-if="showQuestion[5]"
+      />
     </div>
   </div>
 
@@ -208,21 +233,27 @@ watch(
     <img src="/office_sad.gif" alt="Office Sad" />
     <TextAnimated text="Hmm, não era essa a resposta" />
     <TextAnimated text="Você chegou tão perto, mas perdeu mesmo assim" />
-    <NextButton url="/rules" text="Próxima jogadora" v-if="showWrongAnswerButton"/>
+    <NextButton url="/rules" text="Próxima jogadora" v-if="showWrongAnswerButton" />
   </div>
 
   <div class="result" v-if="showPresents">
     <PlayAudio file="/sci_fi_warning_alert.mp3" v-if="showPresentsText[0]" />
-    <TextAnimated text="Espera aí, não acabou" v-if="showPresentsText[0]"/>
+    <TextAnimated text="Espera aí, não acabou" v-if="showPresentsText[0]" />
     <TextAnimated text="Vocês chegaram tão perto, mas ninguém ganhou" v-if="showPresentsText[1]" />
-    <TextAnimated text="Como estamos em espirito natalino" v-if="showPresentsText[2]" />
+    <TextAnimated text="Como estamos em espírito natalino" v-if="showPresentsText[2]" />
     <TextAnimated text="Vou fazer uma boa ação" v-if="showPresentsText[3]" />
     <TextAnimated text="Vou sortear os presentes de vocês" v-if="showPresentsText[4]" />
+    <PlayAudio file="/drum_roll.mp3" v-if="showPresentsText[5]" />
     <TextAnimated text="O resultado é ..." v-if="showPresentsText[5]" />
-    <PlayAudio file="/christmas_song.mp3" v-if="showPresentsText[6]" />
+    <PlayAudio
+      file="/christmas_song.mp3"
+      v-if="showPresentsText[6] || showPresentsText[7] || showPresentsText[8]"
+    />
     <TextAnimated text="Sandra, você ganhou o presente 3" v-if="showPresentsText[6]" />
-    <TextAnimated text="Carol, você ganhou o presente 1" v-if="showPresentsText[6]" />
-    <TextAnimated text="Viviane, você ganhou o presente 2" v-if="showPresentsText[6]" />
+    <NextButton text="Próximo presente" @click="showNext(7)" v-if="showPresentsText[6]" />
+    <TextAnimated text="Carol, você ganhou o presente 1" v-if="showPresentsText[7]" />
+    <NextButton text="Próximo presente" @click="showNext(8)" v-if="showPresentsText[7]" />
+    <TextAnimated text="Viviane, você ganhou o presente 2" v-if="showPresentsText[8]" />
   </div>
 
   <div class="result" v-if="correctAnswer">
