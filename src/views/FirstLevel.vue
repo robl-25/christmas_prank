@@ -1,16 +1,22 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import TextAnimated from '../components/TextAnimated.vue'
 import NextButton from '../components/NextButton.vue'
 import { delay } from '../composables/time.ts'
 import PlayAudio from '@/components/PlayAudio.vue'
 
+const router = useRouter()
 const showElements = ref(Array(2).fill(false))
 const showButton = ref(false)
 const showSadness = ref(false)
 const showHapiness = ref(false)
-const currentPlayer = localStorage.getItem('currentPlayer') || undefined
+const currentPlayer = localStorage.getItem('currentPlayer') || ''
 const loserPlayers = localStorage.getItem('loserPlayers')?.split(',') || []
+
+if (currentPlayer === '') {
+  router.push({ name: 'home' })
+}
 
 showText()
 

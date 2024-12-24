@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { computed, ref, watch } from 'vue'
 import TextAnimated from '../components/TextAnimated.vue'
 import CounterDown from '../components/CounterDown.vue'
@@ -9,8 +10,9 @@ import { getRandomInt } from '@/composables/random.ts'
 import { removeItemOnce } from '@/composables/array.ts'
 import PlayAudio from '@/components/PlayAudio.vue'
 
+const router = useRouter()
 const showElements = ref(Array(6).fill(false))
-const currentPlayer = localStorage.getItem('currentPlayer') || undefined
+const currentPlayer = localStorage.getItem('currentPlayer') || ''
 const showRules = localStorage.getItem('level2Rules')
 const loserPlayers = localStorage.getItem('level3Losers')?.split(',') || []
 const players = localStorage.getItem('players')?.split(',') || []
@@ -95,18 +97,22 @@ const showQuestion = ref(Array(6).fill(false))
 const answer = ref('')
 const questionIndex = computed(() => {
   let alreadyAsked = true
-  let index
+  let index = 0
 
   while (alreadyAsked) {
     index = getRandomInt(0, questions.length)
 
-    if (!askedIndexes.includes(index)) {
+    if (!askedIndexes.includes(index.toString(10))) {
       alreadyAsked = false
     }
   }
 
   return index
 })
+
+if (currentPlayer === '') {
+  router.push({ name: 'home' })
+}
 
 showText()
 
@@ -115,7 +121,10 @@ async function showText() {
     return submit()
   }
 
-  localStorage.setItem('askedQuestions', askedIndexes.concat([questionIndex.value]).join(','))
+  localStorage.setItem(
+    'askedQuestions',
+    askedIndexes.concat([questionIndex.value.toString(10)]).join(','),
+  )
   showElements.value[0] = true
 
   if ([null, undefined, 'true'].includes(showRules)) {

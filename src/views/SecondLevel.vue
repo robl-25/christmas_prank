@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { computed, ref, watch } from 'vue'
 import TextAnimated from '../components/TextAnimated.vue'
 import CounterDown from '../components/CounterDown.vue'
@@ -7,8 +8,9 @@ import InputAnswer from '@/components/InputAnswer.vue'
 import NextButton from '../components/NextButton.vue'
 import PlayAudio from '@/components/PlayAudio.vue'
 
+const router = useRouter()
 const showElements = ref(Array(6).fill(false))
-const currentPlayer = localStorage.getItem('currentPlayer') || undefined
+const currentPlayer = localStorage.getItem('currentPlayer') || ''
 const showRules = localStorage.getItem('level2Rules')
 const loserPlayers = localStorage.getItem('loserPlayers')?.split(',') || []
 const answerInput = ref()
@@ -28,6 +30,10 @@ const question = computed(() => {
 showText()
 
 async function showText() {
+  if (currentPlayer === '') {
+    router.push({ name: 'home' })
+  }
+
   if (loserPlayers.includes(currentPlayer)) {
     return submit()
   }
