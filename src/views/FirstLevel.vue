@@ -73,7 +73,7 @@ function hapinessSelection(scale: number) {
   </div>
 
   <div class="result" v-if="showHapiness">
-    <PlayAudio file="/pleased_crowd.mp3" />
+    <PlayAudio file="/yeah_song.mp3" />
     <img src="/office_party.gif" alt="Office Party" />
     <TextAnimated text="Gostei da animação" />
     <TextAnimated text="Preparada para próxima fase?" />

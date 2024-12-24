@@ -54,7 +54,7 @@ function submit() {
   showElements.value[5] = false
   answer.value = answerInput.value?.answer || ''
 
-  if (answer.value.toLowerCase() === 'mariane') {
+  if (answer.value.toLowerCase().trim() === 'mariane') {
     correctAnswer.value = true
   } else {
     wrongAnswer.value = true
@@ -82,7 +82,7 @@ watch(
       text="Neste nível você terá 2 minutos para acertar a resposta"
       v-if="showElements[1]"
     />
-    <TextAnimated text="A pergunta será relacionada à uma pessoa" v-if="showElements[2]" />
+    <TextAnimated text="A pergunta será relacionada á uma pessoa" v-if="showElements[2]" />
     <TextAnimated text="Somente será aceito o primero nome da pessoa" v-if="showElements[3]" />
     <TextAnimated
       text="Para pessoas com nome composto, é preciso digitar o nome composto"
@@ -104,17 +104,17 @@ watch(
   </div>
 
   <div class="result" v-if="wrongAnswer">
-    <PlayAudio file="/aww.mp3" />
-    <img src="/office_sad.gif" alt="Office Sad" />
+    <PlayAudio file="/liar.mp3" />
+    <img src="/liar.gif" alt="Liar" />
     <TextAnimated text="Não vale mentir!" />
     <TextAnimated text="Pela mentira você perdeu" />
     <NextButton url="/rules" text="Próxima jogadora" />
   </div>
 
   <div class="result" v-if="correctAnswer">
-    <PlayAudio file="/pleased_crowd.mp3" />
-    <img src="/office_party.gif" alt="Office Party" />
-    <TextAnimated text="Correto!!!" />
+    <PlayAudio file="/oh_yeah.mp3" />
+    <img src="/diva.gif" alt="Diva" />
+    <TextAnimated text="Eu sei, eu sou demais &#128526;" />
     <TextAnimated text="Preparada para próxima fase?" />
     <NextButton url="/third-level" text="Próximo nível" />
   </div>

@@ -230,7 +230,7 @@ watch(
 
   <div class="result" v-if="wrongAnswer">
     <PlayAudio file="/fail_jingle_stereo.mp3" />
-    <img src="/office_sad.gif" alt="Office Sad" />
+    <img src="/shrugging.gif" alt="Shrugging" />
     <TextAnimated text="Hmm, não era essa a resposta" />
     <TextAnimated text="Você chegou tão perto, mas perdeu mesmo assim" />
     <NextButton url="/rules" text="Próxima jogadora" v-if="showWrongAnswerButton" />
