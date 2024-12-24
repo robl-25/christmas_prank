@@ -29,7 +29,7 @@ yarn dev
 ### Type-Check, Compile and Minify for Production
 
 ```sh
-yarn build
+yarn build --mode production
 ```
 
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
