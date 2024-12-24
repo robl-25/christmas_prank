@@ -107,7 +107,7 @@ watch(
   </div>
 
   <div class="result" v-if="wrongAnswer">
-    <PlayAudio file="/liar.mp3" />
+    <PlayAudio file="/you_liar.mp3" />
     <img src="/liar.gif" alt="Liar" />
     <TextAnimated text="Não vale mentir!" />
     <TextAnimated text="Pela mentira você perdeu" />
