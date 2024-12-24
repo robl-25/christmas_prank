@@ -29,7 +29,7 @@ const questions = [
     answer: 'Og',
   },
   {
-    question: 'Qual o primeiro ator à ganhar um oscar?',
+    question: 'Quem foi o primeiro ator à ganhar um oscar?',
     answer: 'Emil Jannings',
   },
   {
