@@ -10,10 +10,9 @@ import { removeItemOnce } from '@/composables/array.ts'
 import PlayAudio from '@/components/PlayAudio.vue'
 
 const showElements = ref(Array(6).fill(false))
-const currentPlayer = localStorage.getItem('currentPlayer') || ''
+const currentPlayer = localStorage.getItem('currentPlayer') || undefined
 const showRules = localStorage.getItem('level2Rules')
-const loserPlayersCookie = localStorage.getItem('level3Losers') || ''
-const loserPlayers = loserPlayersCookie.split(',') || []
+const loserPlayers = localStorage.getItem('level3Losers')?.split(',') || []
 const players = localStorage.getItem('players')?.split(',') || []
 const answerInput = ref()
 const wrongAnswer = ref(false)
@@ -21,6 +20,7 @@ const correctAnswer = ref(false)
 const showWrongAnswerButton = ref(false)
 const showPresents = ref(false)
 const showPresentsText = ref(Array(7).fill(false))
+const askedIndexes = localStorage.getItem('askedQuestions')?.split(',') || []
 const questions = [
   {
     question: 'Qual o último elemento da tabela periódica?',
@@ -94,7 +94,18 @@ const showQuestion = ref(Array(6).fill(false))
 
 const answer = ref('')
 const questionIndex = computed(() => {
-  return getRandomInt(0, questions.length)
+  let alreadyAsked = true
+  let index
+
+  while (alreadyAsked) {
+    index = getRandomInt(0, questions.length)
+
+    if (!askedIndexes.includes(index)) {
+      alreadyAsked = false
+    }
+  }
+
+  return index
 })
 
 showText()
@@ -104,6 +115,7 @@ async function showText() {
     return submit()
   }
 
+  localStorage.setItem('askedQuestions', askedIndexes.concat([questionIndex.value]).join(','))
   showElements.value[0] = true
 
   if ([null, undefined, 'true'].includes(showRules)) {
