@@ -8,10 +8,9 @@ import NextButton from '../components/NextButton.vue'
 import PlayAudio from '@/components/PlayAudio.vue'
 
 const showElements = ref(Array(6).fill(false))
-const currentPlayer = localStorage.getItem('currentPlayer') || ''
+const currentPlayer = localStorage.getItem('currentPlayer') || undefined
 const showRules = localStorage.getItem('level2Rules')
-const loserPlayersCookie = localStorage.getItem('loserPlayers') || ''
-const loserPlayers = loserPlayersCookie.split(',')
+const loserPlayers = localStorage.getItem('loserPlayers')?.split(',') || []
 const answerInput = ref()
 const wrongAnswer = ref(false)
 const correctAnswer = ref(false)

@@ -26,9 +26,10 @@ async function showText() {
   localStorage.setItem('playersToGo', 'Viviane,Carol,Sandra')
   localStorage.setItem('level2Rules', 'true')
   localStorage.setItem('generalRules', 'true')
-  localStorage.setItem('loserPlayers', '')
+  localStorage.removeItem('loserPlayers')
   localStorage.setItem('level3Rules', 'true')
-  localStorage.setItem('level3Losers', '')
+  localStorage.removeItem('level3Losers')
+  localStorage.removeItem('askedQuestions')
 }
 </script>
 

@@ -9,9 +9,8 @@ const showElements = ref(Array(2).fill(false))
 const showButton = ref(false)
 const showSadness = ref(false)
 const showHapiness = ref(false)
-const loserPlayersCookie = localStorage.getItem('loserPlayers') || ''
-const currentPlayer = localStorage.getItem('currentPlayer') || ''
-const loserPlayers = loserPlayersCookie.split(',')
+const currentPlayer = localStorage.getItem('currentPlayer') || undefined
+const loserPlayers = localStorage.getItem('loserPlayers')?.split(',') || []
 
 showText()
 
