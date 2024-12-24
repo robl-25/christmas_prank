@@ -17,8 +17,7 @@ const answerInput = ref()
 const wrongAnswer = ref(false)
 const correctAnswer = ref(false)
 const counterElement = ref()!
-
-const answer = ref('')
+const answer = computed(() => answerInput.value?.answer)
 const question = computed(() => {
   if (currentPlayer === 'Sandra') {
     return 'Quem é a sua filha favorita?'
@@ -57,9 +56,8 @@ async function showText() {
 
 function submit() {
   showElements.value[5] = false
-  answer.value = answerInput.value?.answer || ''
 
-  if (answer.value.toLowerCase().trim() === 'mariane') {
+  if (answer.value?.toLowerCase().trim() === 'mariane') {
     correctAnswer.value = true
   } else {
     wrongAnswer.value = true

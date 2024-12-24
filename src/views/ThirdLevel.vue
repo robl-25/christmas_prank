@@ -29,7 +29,7 @@ const questions = [
     answer: 'Og',
   },
   {
-    question: 'Quem foi o primeiro ator à ganhar um oscar?',
+    question: 'Quem foi o primeiro ator a ganhar um oscar?',
     answer: 'Emil Jannings',
   },
   {
@@ -94,7 +94,7 @@ const showLastQuestion = computed(() => {
 })
 const showQuestion = ref(Array(6).fill(false))
 
-const answer = ref('')
+const answer = computed(() => answerInput.value?.answer)
 const questionIndex = computed(() => {
   let alreadyAsked = true
   let index = 0
@@ -159,9 +159,8 @@ async function showText() {
 
 async function submit() {
   showElements.value[5] = false
-  answer.value = answerInput.value?.answer || ''
 
-  if (answer.value.toLowerCase() === questions[questionIndex.value].answer.toLocaleLowerCase()) {
+  if (answer.value?.toLowerCase() === questions[questionIndex.value].answer.toLocaleLowerCase()) {
     correctAnswer.value = true
   } else {
     wrongAnswer.value = true
