@@ -1,11 +1,10 @@
 <script setup lang="ts">
-const props = defineProps<{ url?: string; text: string }>()
+const props = defineProps<{ url: string; text: string }>()
 </script>
 
 <template>
   <div class="button-container">
-    <RouterLink :to="props.url" class="button-85" v-if="props.url">{{ props.text }}</RouterLink>
-    <button class="button-85" v-else>{{ props.text }}</button>
+    <RouterLink :to="props.url" class="button-next">{{ props.text }}</RouterLink>
   </div>
 </template>
 
@@ -15,7 +14,7 @@ const props = defineProps<{ url?: string; text: string }>()
   margin-top: 2rem;
 }
 
-.button-85 {
+.button-next {
   padding: 0.6em 2em;
   border: none;
   outline: none;
@@ -30,7 +29,7 @@ const props = defineProps<{ url?: string; text: string }>()
   touch-action: manipulation;
 }
 
-.button-85:before {
+.button-next:before {
   content: '';
   background: linear-gradient(
     45deg,
@@ -53,12 +52,12 @@ const props = defineProps<{ url?: string; text: string }>()
   -webkit-filter: blur(5px);
   width: calc(100% + 4px);
   height: calc(100% + 4px);
-  animation: glowing-button-85 20s linear infinite;
+  animation: glowing-button-next 20s linear infinite;
   transition: opacity 0.3s ease-in-out;
   border-radius: 10px;
 }
 
-@keyframes glowing-button-85 {
+@keyframes glowing-button-next {
   0% {
     background-position: 0 0;
   }
@@ -70,7 +69,7 @@ const props = defineProps<{ url?: string; text: string }>()
   }
 }
 
-.button-85:after {
+.button-next:after {
   z-index: -1;
   content: '';
   position: absolute;

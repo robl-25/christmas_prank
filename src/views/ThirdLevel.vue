@@ -20,7 +20,7 @@ const wrongAnswer = ref(false)
 const correctAnswer = ref(false)
 const showWrongAnswerButton = ref(false)
 const showPresents = ref(false)
-const showPresentsText = ref(Array(6).fill(false))
+const showPresentsText = ref(Array(7).fill(false))
 const questions = [
   {
     question: 'Qual o último elemento da tabela periódica?',
@@ -161,7 +161,7 @@ async function submit() {
     showPresentsText.value[0] = true
     await delay(5000)
 
-    for (let index = 1; index < 7; index++) {
+    for (let index = 1; index < showPresentsText.value.length; index++) {
       await delay(5000)
       showPresentsText.value[index - 1] = false
       showPresentsText.value[index] = true
@@ -169,11 +169,6 @@ async function submit() {
   } else {
     showWrongAnswerButton.value = true
   }
-}
-
-function showNext(index: number) {
-  showPresentsText.value[index - 1] = false
-  showPresentsText.value[index] = true
 }
 
 watch(
@@ -245,23 +240,10 @@ watch(
     <TextAnimated text="Vou sortear os presentes de vocês" v-if="showPresentsText[4]" />
     <PlayAudio file="/drum_roll.mp3" v-if="showPresentsText[5]" />
     <TextAnimated text="O resultado é ..." v-if="showPresentsText[5]" />
-    <PlayAudio
-      file="/christmas_song.mp3"
-      v-if="showPresentsText[6] || showPresentsText[7] || showPresentsText[8]"
-    />
+    <PlayAudio file="/christmas_song.mp3" v-if="showPresentsText[6]" />
     <TextAnimated text="Sandra, você ganhou o presente 3" v-if="showPresentsText[6]" />
-    <NextButton text="Próximo presente" @click="showNext(7)" v-if="showPresentsText[6]" />
-    <TextAnimated text="Carol, você ganhou o presente 1" v-if="showPresentsText[7]" />
-    <NextButton text="Próximo presente" @click="showNext(8)" v-if="showPresentsText[7]" />
-    <TextAnimated text="Viviane, você ganhou o presente 2" v-if="showPresentsText[8]" />
-    <TextAnimated
-      text="Contudo esse presente, infelizemente não chegou a tempo."
-      v-if="showPresentsText[8]"
-    />
-    <TextAnimated
-      text="Mas não se preocupe, ele está à caminho e será maravilhoso &#128513;"
-      v-if="showPresentsText[8]"
-    />
+    <TextAnimated text="Carol, você ganhou o presente 1" v-if="showPresentsText[6]" />
+    <TextAnimated text="Viviane, você ganhou o presente 2" v-if="showPresentsText[6]" />
   </div>
 
   <div class="result" v-if="correctAnswer">
