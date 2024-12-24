@@ -87,7 +87,7 @@ watch(
       text="Neste nível você terá 2 minutos para acertar a resposta"
       v-if="showElements[1]"
     />
-    <TextAnimated text="A pergunta será relacionada á uma pessoa" v-if="showElements[2]" />
+    <TextAnimated text="A pergunta será relacionada a uma pessoa" v-if="showElements[2]" />
     <TextAnimated text="Somente será aceito o primero nome da pessoa" v-if="showElements[3]" />
     <TextAnimated
       text="Para pessoas com nome composto, é preciso digitar o nome composto"
